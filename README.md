@@ -21,18 +21,8 @@ Key Logic:
 - Converted `confirmed_amount` from **kobo to naira** by dividing by 100.
 Challenge: 
 Ensuring that the user has both product types required a `HAVING` clause instead of a `WHERE`, since the filtering was based on grouped values.
-Assessment_Q2.sql — Estimating Customer Lifetime Value (CLV)
-Purpose:
-Estimate a simple version of Customer Lifetime Value by using transaction volume and user tenure.
-Key Logic:
-- Counted transactions and calculated total confirmed amount per user.
-- Calculated `tenure` as number of months since the account was enabled.
-- Estimated CLV with the formula:  
-  `(transactions per month) × 12 × ₦1` (using 0.001 multiplier as a proxy).
-Challenge: 
-Avoiding divide-by-zero errors when tenure was 0 months. I handled this using `NULLIF()` and ensured safe calculations using SQL rounding.
 
-Assessment_Q3 — Categorizing Users by Monthly Transaction Frequency
+Assessment_Q2 — Categorizing Users by Monthly Transaction Frequency
 Purpose:  
 Categorize customers as High,Medium, or Low frequency users based on their average monthly transaction volume.
 Key Logic:
@@ -45,7 +35,7 @@ Key Logic:
 Challenge: 
 Ensuring total months was never 0 by wrapping the logic in GREATEST(..., 1). Also, breaking down the logic into Common Table Expressions (CTEs) improved clarity.
 
-Assessment_Q4.sql` — Detecting Dormant Plans
+Assessment_Q3.sql` — Detecting Dormant Plans
 Purpose: 
 Find plans (either savings or investment) that haven’t had any transaction in over a year.
 
@@ -54,10 +44,25 @@ Key Logic:
 - Calculated inactivity as the number of days since the last transaction.
 - Filtered out deleted plans and only included those inactive for over 365 days.
 
-Challenge:  
+- Challenge:  
 Plans that are soft-deleted (`is_deleted = 1`) needed to be excluded, and inactive duration required precise use of `DATEDIFF()`. 
 i tried Date_trunc and discovered by research that my sql workbench dont use it but prefered extract or format to format data.
 
+
+
+- Assessment_Q4.sql — Estimating Customer Lifetime Value (CLV)
+Purpose:
+Estimate a simple version of Customer Lifetime Value by using transaction volume and user tenure.
+Key Logic:
+- Counted transactions and calculated total confirmed amount per user.
+- Calculated `tenure` as number of months since the account was enabled.
+- Estimated CLV with the formula:  
+  `(transactions per month) × 12 × ₦1` (using 0.001 multiplier as a proxy).
+Challenge: 
+Avoiding divide-by-zero errors when tenure was 0 months. I handled this using `NULLIF()` and ensured safe calculations using SQL rounding.
+
+
+--CONCLUSION
 in Conclusion i approached each question by trying to understand what table we are to join to each table and why, what is common 
 This assessment tested not only my SQL skills, but also my ability to think like an analyst — understanding business requirements, 
 connecting data relationships, and writing optimized queries
